@@ -153,8 +153,11 @@
             img.dataset.bankSlug = slug;
 
             var newSrc = CDN + slug + '.webp';
-            img.src = newSrc;
-            img.srcset = newSrc + ' 1x, ' + newSrc + ' 2x';
+            if (img.dataset.replaced !== '1') {
+                img.src = newSrc;
+                img.srcset = newSrc + ' 1x, ' + newSrc + ' 2x';
+                img.dataset.replaced = '1';
+            }
 
             activeSlides.push(slide);
         });
@@ -174,7 +177,7 @@
     }
 
     var obs = new MutationObserver(run);
-    obs.observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
 
     setTimeout(run, 1000);
     setTimeout(run, 2500);

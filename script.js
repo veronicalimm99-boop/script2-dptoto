@@ -2,7 +2,7 @@
     var CDN = 'https://imgstorage.site/view/yuyu/';
 
     var knownBanks = [
-        'bca', 'bni','mandiri','bri','dana','qris',
+        'bca', 'bni', 'mandiri', 'bri', 'dana', 'qris'
     ];
 
     var lastRun = 0;
@@ -23,11 +23,19 @@
         document.head.appendChild(style);
     }
 
-    function getSlug(src) {
+    function getSlug(src, img) {
+        if (img && img.dataset.bankSlug) return img.dataset.bankSlug;
+
         var m = src.match(/\/raintoto\/bank\/([^.]+)\./);
         if (m) return m[1].toLowerCase();
+
         m = src.match(/\/banks\/([^.]+)\./);
-        return m ? m[1].toLowerCase() : '';
+        if (m) return m[1].toLowerCase();
+
+        m = src.match(/\/view\/yuyu\/([^.]+)\./);
+        if (m) return m[1].toLowerCase();
+
+        return '';
     }
 
     function hide(slide) {
@@ -41,6 +49,7 @@
 
         var wrapper = document.querySelector('.banklist__wrapper');
         if (!wrapper) return;
+
         var slides = wrapper.querySelectorAll('.carousel__slide');
         if (!slides.length) return;
 
@@ -53,23 +62,40 @@
 
         slides.forEach(function(slide) {
             var img = slide.querySelector('.banklist__logo');
-            if (!img) { hide(slide); return; }
+            if (!img) {
+                hide(slide);
+                return;
+            }
 
-            var slug = getSlug(img.getAttribute('src') || '');
-            if (!slug || knownBanks.indexOf(slug) === -1) { hide(slide); return; }
+            var slug = getSlug(img.getAttribute('src') || '', img);
+
+            if (!slug || knownBanks.indexOf(slug) === -1) {
+                hide(slide);
+                return;
+            }
 
             var indicator = slide.querySelector('.banklist__status-indicator');
             if (indicator && (
                 indicator.classList.contains('banklist__status-indicator--offline') ||
                 indicator.classList.contains('banklist__status-indicator--warning')
-            )) { hide(slide); return; }
+            )) {
+                hide(slide);
+                return;
+            }
 
-            if (seen[slug]) { hide(slide); return; }
+            if (seen[slug]) {
+                hide(slide);
+                return;
+            }
+
             seen[slug] = true;
-
             slide.style.removeProperty('display');
-            if (img.src.indexOf('raintoto-hujan.b-cdn.net') === -1) {
-                var newSrc = CDN + slug + '.webp';
+
+            img.dataset.bankSlug = slug;
+
+            var newSrc = CDN + slug + '.webp';
+
+            if (img.src !== newSrc) {
                 img.src = newSrc;
                 img.srcset = newSrc + ' 1x, ' + newSrc + ' 2x';
             }

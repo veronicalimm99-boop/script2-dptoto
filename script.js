@@ -30,7 +30,6 @@
         width: max-content !important;
         transform: none !important;
         transition: none !important;
-        animation: bankScrollLoop 14s linear infinite !important;
     }
 
     .banklist__wrapper .carousel__slide {

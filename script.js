@@ -27,7 +27,7 @@
                 gap: 8px !important;
                 display: flex !important;
                 width: max-content !important;
-                animation: bankScrollLoop 18s linear infinite !important;
+                animation: bankScrollLoop 25s linear infinite !important;
                 transform: none !important;
                 transition: none !important;
             }

@@ -13,68 +13,65 @@
         var style = document.createElement('style');
         style.id = 'banklist-override-css';
         style.textContent = `
-    .banklist__wrapper { 
-        margin-top: 0 !important; 
-        padding-top: 0 !important; 
-        overflow: hidden !important;
-    }
+            .banklist__wrapper { 
+                margin-top: 0 !important; 
+                padding-top: 0 !important; 
+                overflow: hidden !important;
+            }
 
-    .banklist__wrapper .carousel__viewport {
-        overflow: hidden !important;
-    }
+            .banklist__wrapper .carousel__viewport {
+                overflow: hidden !important;
+            }
 
-    .banklist__wrapper .carousel__track {
-        display: flex !important;
-        flex-wrap: nowrap !important;
-        gap: 6px !important;
-        width: max-content !important;
-        transform: none !important;
-        transition: none !important;
-    }
+            .banklist__wrapper .carousel__track {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 6px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                transform: translateX(0px) !important;
+                transition: none !important;
+                animation: none !important;
+            }
 
-    .banklist__wrapper .carousel__slide {
-        padding: 0 !important;
-        flex: 0 0 auto !important;
-        width: 135px !important;
-        display: flex !important;
-    }
+            .banklist__wrapper .carousel__slide {
+                padding: 0 !important;
+                flex: 0 0 135px !important;
+                width: 135px !important;
+                max-width: 135px !important;
+                display: flex !important;
+            }
 
-    .banklist__item { 
-        background: transparent !important; 
-        background-color: transparent !important; 
-        box-shadow: none !important; 
-        border: none !important; 
-        padding: 2px !important; 
-    }
+            .banklist__item { 
+                background: transparent !important; 
+                background-color: transparent !important; 
+                box-shadow: none !important; 
+                border: none !important; 
+                padding: 2px !important; 
+                width: 100% !important;
+            }
 
-    .banklist__logo { 
-        background: transparent !important; 
-        width: 100% !important; 
-        height: 70px !important; 
-        object-fit: contain !important; 
-    }
+            .banklist__logo { 
+                background: transparent !important; 
+                width: 100% !important; 
+                height: 70px !important; 
+                object-fit: contain !important; 
+            }
 
-    .banklist__status-indicator { 
-        display: none !important; 
-    }
+            .banklist__status-indicator { 
+                display: none !important; 
+            }
 
-    .banklist__status-legend { 
-        margin-top: 4px !important; 
-    }
+            .banklist__status-legend { 
+                margin-top: 4px !important; 
+            }
 
-    .banklist__wrapper .carousel__pagination {
-        display: none !important;
-    }
-
-    @keyframes bankScrollLoop {
-        0% {
-            transform: translateX(0);
-        }
-        100% {
-            transform: translateX(-50%);
-        }
-    }
-`;
+            .banklist__wrapper .carousel__pagination {
+                display: none !important;
+            }
+        `;
 
         document.head.appendChild(style);
     }
@@ -109,13 +106,16 @@
         var track = wrapper.querySelector('.carousel__track');
         if (!track) return;
 
-        var slides = track.querySelectorAll('.carousel__slide:not(.banklist-clone)');
+        var slides = track.querySelectorAll('.carousel__slide');
         if (!slides.length) return;
 
         injectStyle();
 
+        track.querySelectorAll('.banklist-clone').forEach(function(clone) {
+            clone.remove();
+        });
+
         var seen = {};
-        var activeSlides = [];
 
         slides.forEach(function(slide) {
             var img = slide.querySelector('.banklist__logo');
@@ -153,27 +153,20 @@
             img.dataset.bankSlug = slug;
 
             var newSrc = CDN + slug + '.webp';
+
             if (img.dataset.replaced !== '1') {
                 img.src = newSrc;
                 img.srcset = newSrc + ' 1x, ' + newSrc + ' 2x';
                 img.dataset.replaced = '1';
             }
-
-            activeSlides.push(slide);
         });
 
-        track.querySelectorAll('.banklist-clone').forEach(function(clone) {
-            clone.remove();
-        });
-
-        activeSlides.forEach(function(slide) {
-            var clone = slide.cloneNode(true);
-            clone.classList.add('banklist-clone');
-            track.appendChild(clone);
-        });
+        track.style.setProperty('transform', 'translateX(0px)', 'important');
+        track.style.setProperty('animation', 'none', 'important');
+        track.style.setProperty('width', '100%', 'important');
 
         var carousel = wrapper.querySelector('.banklist__carousel');
-        if (carousel) carousel.style.setProperty('--vc-slide-gap', '8px');
+        if (carousel) carousel.style.setProperty('--vc-slide-gap', '6px');
     }
 
     var obs = new MutationObserver(run);

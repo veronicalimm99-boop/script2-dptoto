@@ -13,71 +13,69 @@
         var style = document.createElement('style');
         style.id = 'banklist-override-css';
         style.textContent = `
-            .banklist__wrapper { 
-                margin-top: 0 !important; 
-                padding-top: 0 !important; 
-                overflow: hidden !important;
-            }
+    .banklist__wrapper { 
+        margin-top: 0 !important; 
+        padding-top: 0 !important; 
+        overflow: hidden !important;
+    }
 
-            .banklist__wrapper .carousel__viewport {
-                overflow: hidden !important;
-            }
+    .banklist__wrapper .carousel__viewport {
+        overflow: hidden !important;
+    }
 
-            .banklist__wrapper .carousel__track { 
-                gap: 8px !important;
-                display: flex !important;
-                width: max-content !important;
-                animation: bankScrollLoop 25s linear infinite !important;
-                transform: none !important;
-                transition: none !important;
-            }
+    .banklist__wrapper .carousel__track {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        gap: 6px !important;
+        width: max-content !important;
+        transform: none !important;
+        transition: none !important;
+        animation: bankScrollLoop 14s linear infinite !important;
+    }
 
-            .banklist__wrapper .carousel__track:hover {
-                animation-play-state: paused !important;
-            }
+    .banklist__wrapper .carousel__slide {
+        padding: 0 !important;
+        flex: 0 0 auto !important;
+        width: 135px !important;
+        display: flex !important;
+    }
 
-            .banklist__wrapper .carousel__slide { 
-                padding: 0 !important;
-                flex: 0 0 auto !important;
-                width: 140px !important;
-            }
+    .banklist__item { 
+        background: transparent !important; 
+        background-color: transparent !important; 
+        box-shadow: none !important; 
+        border: none !important; 
+        padding: 2px !important; 
+    }
 
-            .banklist__item { 
-                background: transparent !important; 
-                background-color: transparent !important; 
-                box-shadow: none !important; 
-                border: none !important; 
-                padding: 2px !important; 
-            }
+    .banklist__logo { 
+        background: transparent !important; 
+        width: 100% !important; 
+        height: 70px !important; 
+        object-fit: contain !important; 
+    }
 
-            .banklist__logo { 
-                background: transparent !important; 
-                width: 100% !important; 
-                height: 70px !important; 
-                object-fit: contain !important; 
-            }
+    .banklist__status-indicator { 
+        display: none !important; 
+    }
 
-            .banklist__status-indicator { 
-                display: none !important; 
-            }
+    .banklist__status-legend { 
+        margin-top: 4px !important; 
+    }
 
-            .banklist__status-legend { 
-                margin-top: 4px !important; 
-            }
+    .banklist__wrapper .carousel__pagination {
+        display: none !important;
+    }
 
-            .banklist__wrapper .carousel__pagination {
-                display: none !important;
-            }
-
-            @keyframes bankScrollLoop {
-                0% {
-                    transform: translateX(0);
-                }
-                100% {
-                    transform: translateX(-50%);
-                }
-            }
-        `;
+    @keyframes bankScrollLoop {
+        0% {
+            transform: translateX(0);
+        }
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+`;
 
         document.head.appendChild(style);
     }

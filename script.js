@@ -3,7 +3,7 @@
         {
             img: 'https://imgstorage.site/view/yuyu/bca.gif',
             link: '/'
-        },a
+        },
         {
             img: 'https://imgstorage.site/view/yuyu/mandiri.gif',
             link: '/'

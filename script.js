@@ -1,29 +1,8 @@
 (function() {
-    var customBanners = [
-        {
-            img: 'https://imgstorage.site/view/yuyu/bca.gif',
-            link: '/'
-        },
-        {
-            img: 'https://imgstorage.site/view/yuyu/mandiri.gif',
-            link: '/'
-        },
-        {
-            img: 'https://imgstorage.site/view/yuyu/bri.gif',
-            link: '/'
-        },
-        {
-            img: 'https://imgstorage.site/view/yuyu/bni.gif',
-            link: '/'
-        },
-        {
-            img: 'https://imgstorage.site/view/yuyu/dana.gif',
-            link: '/'
-        },
-        {
-            img: 'https://imgstorage.site/view/yuyu/qris.gif',
-            link: '/'
-        }
+    var CDN = 'https://imgstorage.site/view/yuyu/';
+
+    var knownBanks = [
+        'bca', 'bni','mandiri','bri','dana','qris',
     ];
 
     var lastRun = 0;

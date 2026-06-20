@@ -16,16 +16,30 @@
             .banklist__wrapper { 
                 margin-top: 0 !important; 
                 padding-top: 0 !important; 
+                overflow: hidden !important;
+            }
+
+            .banklist__wrapper .carousel__viewport {
+                overflow: hidden !important;
             }
 
             .banklist__wrapper .carousel__track { 
-                gap: 6px !important; 
-                transform: translateX(0px) !important;
+                gap: 8px !important;
+                display: flex !important;
+                width: max-content !important;
+                animation: bankScrollLoop 3s linear infinite !important;
+                transform: none !important;
                 transition: none !important;
             }
 
+            .banklist__wrapper .carousel__track:hover {
+                animation-play-state: paused !important;
+            }
+
             .banklist__wrapper .carousel__slide { 
-                padding: 0 !important; 
+                padding: 0 !important;
+                flex: 0 0 auto !important;
+                width: 140px !important;
             }
 
             .banklist__item { 
@@ -54,12 +68,23 @@
             .banklist__wrapper .carousel__pagination {
                 display: none !important;
             }
+
+            @keyframes bankScrollLoop {
+                0% {
+                    transform: translateX(0);
+                }
+                100% {
+                    transform: translateX(-50%);
+                }
+            }
         `;
 
         document.head.appendChild(style);
     }
 
-    function getSlug(src) {
+    function getSlug(src, img) {
+        if (img && img.dataset.bankSlug) return img.dataset.bankSlug;
+
         var m = src.match(/\/raintoto\/bank\/([^.]+)\./);
         if (m) return m[1].toLowerCase();
 
@@ -76,26 +101,6 @@
         slide.style.setProperty('display', 'none', 'important');
     }
 
-    function stopCarousel(wrapper) {
-        var track = wrapper.querySelector('.carousel__track');
-        var viewport = wrapper.querySelector('.carousel__viewport');
-        var carousel = wrapper.querySelector('.banklist__carousel');
-
-        if (track) {
-            track.style.setProperty('transform', 'translateX(0px)', 'important');
-            track.style.setProperty('transition', 'none', 'important');
-        }
-
-        if (viewport) {
-            viewport.style.setProperty('overflow', 'hidden', 'important');
-        }
-
-        if (carousel) {
-            carousel.style.setProperty('--vc-slide-gap', '6px');
-            carousel.removeAttribute('tabindex');
-        }
-    }
-
     function run() {
         var now = Date.now();
         if (now - lastRun < 400) return;
@@ -104,13 +109,16 @@
         var wrapper = document.querySelector('.banklist__wrapper');
         if (!wrapper) return;
 
-        var slides = wrapper.querySelectorAll('.carousel__slide');
+        var track = wrapper.querySelector('.carousel__track');
+        if (!track) return;
+
+        var slides = track.querySelectorAll('.carousel__slide:not(.banklist-clone)');
         if (!slides.length) return;
 
         injectStyle();
 
         var seen = {};
-        var activeCount = 0;
+        var activeSlides = [];
 
         slides.forEach(function(slide) {
             var img = slide.querySelector('.banklist__logo');
@@ -120,7 +128,7 @@
                 return;
             }
 
-            var slug = getSlug(img.getAttribute('src') || '');
+            var slug = getSlug(img.getAttribute('src') || '', img);
 
             if (!slug || knownBanks.indexOf(slug) === -1) {
                 hide(slide);
@@ -143,19 +151,29 @@
             }
 
             seen[slug] = true;
-            activeCount++;
-
             slide.style.removeProperty('display');
 
-            var newSrc = CDN + slug + '.webp';
+            img.dataset.bankSlug = slug;
 
-            if (img.src !== newSrc) {
-                img.src = newSrc;
-                img.srcset = newSrc + ' 1x, ' + newSrc + ' 2x';
-            }
+            var newSrc = CDN + slug + '.webp';
+            img.src = newSrc;
+            img.srcset = newSrc + ' 1x, ' + newSrc + ' 2x';
+
+            activeSlides.push(slide);
         });
 
-        stopCarousel(wrapper);
+        track.querySelectorAll('.banklist-clone').forEach(function(clone) {
+            clone.remove();
+        });
+
+        activeSlides.forEach(function(slide) {
+            var clone = slide.cloneNode(true);
+            clone.classList.add('banklist-clone');
+            track.appendChild(clone);
+        });
+
+        var carousel = wrapper.querySelector('.banklist__carousel');
+        if (carousel) carousel.style.setProperty('--vc-slide-gap', '8px');
     }
 
     var obs = new MutationObserver(run);
@@ -164,5 +182,4 @@
     setTimeout(run, 1000);
     setTimeout(run, 2500);
     setTimeout(run, 4500);
-    setInterval(run, 1500);
 })();

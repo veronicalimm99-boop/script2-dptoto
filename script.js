@@ -1,10 +1,29 @@
 (function() {
-    var CDN = 'https://raintoto-hujan.b-cdn.net/raintoto/bank/';
-
-    var knownBanks = [
-        'bca', 'bni', 'bsi', 'mandiri', 'cimb', 'danamon', 'dana',
-        'gopay', 'jago', 'jenius', 'linkaja', 'maybank', 'mega',
-        'ovo', 'panin', 'permata', 'qris', 'seabank', 'sinarmas'
+    var customBanners = [
+        {
+            img: 'https://imgstorage.site/view/yuyu/bca.gif',
+            link: '/'
+        },a
+        {
+            img: 'https://imgstorage.site/view/yuyu/mandiri.gif',
+            link: '/'
+        },
+        {
+            img: 'https://imgstorage.site/view/yuyu/bri.gif',
+            link: '/'
+        },
+        {
+            img: 'https://imgstorage.site/view/yuyu/bni.gif',
+            link: '/'
+        },
+        {
+            img: 'https://imgstorage.site/view/yuyu/dana.gif',
+            link: '/'
+        },
+        {
+            img: 'https://imgstorage.site/view/yuyu/qris.gif',
+            link: '/'
+        }
     ];
 
     var lastRun = 0;

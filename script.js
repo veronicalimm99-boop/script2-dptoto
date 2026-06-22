@@ -79,7 +79,7 @@
     function getSlug(src, img) {
         if (img && img.dataset.bankSlug) return img.dataset.bankSlug;
 
-        var m = src.match(/\/raintoto\/bank\/([^.]+)\./);
+        var m = src.match(/\/dptoto\/bank\/([^.]+)\./);
         if (m) return m[1].toLowerCase();
 
         m = src.match(/\/banks\/([^.]+)\./);
